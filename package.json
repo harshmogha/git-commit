@@ -1,0 +1,64 @@
+{
+  "name": "git-commit",
+  "version": "1.0.0",
+  "description": "Git - Commit — Secure GitHub uploader by MIRA_FUTURE.AI with OAuth",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "dotenv": "16.4.5",
+    "electron-updater": "^6.8.3",
+    "express": "4.21.0",
+    "keytar": "^7.9.0",
+    "node-fetch": "3.3.2"
+  },
+  "devDependencies": {
+    "electron": "31.0.0",
+    "electron-builder": "24.13.3"
+  },
+  "build": {
+    "appId": "com.mirafuture.gitcommit",
+    "productName": "Git - Commit",
+    "publish": {
+      "provider": "github",
+      "owner": "harshmogha",
+      "repo": "git-commit"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "public/**/*",
+      ".env"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "gitcommit.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "gitcommit.ico",
+      "uninstallerIcon": "gitcommit.ico",
+      "artifactName": "Git-Commit.exe",
+      "shortcutName": "Git - Commit",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "license": "TERMS.md",
+      "runAfterFinish": true,
+      "perMachine": false,
+      "menuCategory": "MIRA_FUTURE.AI"
+    },
+    "portable": {
+      "artifactName": "Git - Commit Portable.exe"
+    }
+  }
+}

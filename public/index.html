@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src http://localhost:8371; img-src 'self' data: https://avatars.githubusercontent.com https://*.githubusercontent.com https://raw.githubusercontent.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+  <title>Git - Commit — MIRA_FUTURE.AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- CUSTOM TITLEBAR -->
+  <div class="titlebar">
+    <span class="titlebar-dot left"></span>
+    <span class="titlebar-brand">MIRA_FUTURE.AI</span>
+    <span class="titlebar-dot right"></span>
+    <div class="titlebar-controls">
+      <button id="btn-min">─</button>
+      <button id="btn-max">□</button>
+      <button id="btn-close" class="close">✕</button>
+    </div>
+  </div>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen">
+    <div class="login-wrapper">
+      <span class="login-eyebrow">✦ MIRA_FUTURE.AI</span>
+      <h1 class="login-title">Git - Commit</h1>
+      <p class="login-subtitle">Choose how to authenticate with GitHub.</p>
+
+      <div class="login-options">
+        <div class="login-option">
+          <div class="login-option-label">Personal Access Token</div>
+          <p class="login-option-desc">Paste your GitHub token. Stored in session memory only — never exposed.</p>
+          <input type="password" class="token-input" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+          <button class="login-btn" id="token-login-btn">Sign In →</button>
+          <div class="login-error" id="login-error"></div>
+
+          <div class="token-steps">
+            <div class="token-steps-title">How to get your token</div>
+            <ol>
+              <li>Go to <a href="#" id="link-tokens">github.com/settings/tokens</a></li>
+              <li>Click <strong>"Generate new token (classic)"</strong></li>
+              <li>Name it: <code>Git - Commit</code></li>
+              <li>Set expiration (e.g. 90 days)</li>
+              <li>Select scopes: <span class="scope-tag">repo</span> <span class="scope-tag">read:user</span></li>
+              <li>Click <strong>"Generate token"</strong></li>
+              <li>Copy the <code>ghp_...</code> token and paste above</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-footer">Secure · Local-only · No telemetry</div>
+    </div>
+  </div>
+
+  <!-- MAIN APP (hidden until authenticated) -->
+  <div id="app-screen" style="display:none;flex-direction:column;flex:1;">
+    <div class="app-body">
+    <aside class="sidebar">
+      <div class="sidebar-title">Git - Commit</div>
+      <div class="sidebar-version">v1.0</div>
+      <div class="sidebar-user">
+        <img src="" alt="avatar" id="sidebar-avatar">
+        <div><div class="name" id="sidebar-name">Loading...</div><div class="login" id="sidebar-login"></div></div>
+      </div>
+      <nav>
+        <a class="nav-item active" data-page="profile" href="#"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg>Profile</a>
+        <a class="nav-item" data-page="repos" href="#"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>Repositories</a>
+        <a class="nav-item" data-page="upload" href="#"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14ZM11.78 4.72a.749.749 0 1 1-1.06 1.06L8.75 3.811V9.5a.75.75 0 0 1-1.5 0V3.811L5.28 5.78a.749.749 0 1 1-1.06-1.06l3.5-3.5a.75.75 0 0 1 1.06 0l3.5 3.5Z"></path></svg>Upload</a>
+        <a class="nav-item" data-page="clone" href="#"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M11.75 2.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-1.5 0V3.25a.75.75 0 0 1 .75-.75Zm-8.5 1a1.75 1.75 0 0 1 1.75-1.75h5.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 10.5 15.75h-5.5a1.75 1.75 0 0 1-1.75-1.75Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h5.5a.25.25 0 0 0 .25-.25V3.5a.25.25 0 0 0-.25-.25Z"></path></svg>Clone Repo</a>
+        <a class="nav-item" data-page="gitcmd" href="#"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7.25 8a.749.749 0 0 1-.22.53l-2.25 2.25a.749.749 0 1 1-1.06-1.06L5.44 8 3.72 6.28a.749.749 0 1 1 1.06-1.06l2.25 2.25c.141.14.22.331.22.53Zm1.5 1.5h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5Z"></path></svg>Git CMD</a>
+        <a class="nav-item" data-page="about" href="#"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>About</a>
+        <a class="nav-item nav-signout" id="nav-logout-btn" href="#"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.75C2 1.784 2.784 1 3.75 1h2.5a.75.75 0 0 1 0 1.5h-2.5a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h2.5a.75.75 0 0 1 0 1.5h-2.5A1.75 1.75 0 0 1 2 13.25Zm10.44 4.5-1.97-1.97a.749.749 0 0 1 1.06-1.06l3.25 3.25a.749.749 0 0 1 0 1.06l-3.25 3.25a.749.749 0 0 1-1.06-1.06l1.97-1.97H6.75a.75.75 0 0 1 0-1.5Z"></path></svg>Sign Out</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <!-- PROFILE PAGE -->
+      <div class="content page" id="page-profile" style="overflow-y:auto;max-height:calc(100vh - 38px);padding-bottom:60px;">
+        <div class="page-header"><h1>Profile</h1><a href="#" class="btn btn-gh-link" id="profile-gh-link">Open on GitHub ↗</a></div>
+        <div id="profile-content"></div>
+      </div>
+
+      <!-- REPOS PAGE -->
+      <div class="content page" id="page-repos" style="display:none;overflow-y:auto;max-height:calc(100vh - 38px);padding-bottom:60px;">
+        <div class="page-header"><h1>Repositories</h1><span class="count" id="repo-count"></span><a href="#" class="btn btn-gh-link" id="repos-gh-link">View on GitHub ↗</a></div>
+        <input type="text" class="repo-search" id="repo-search" placeholder="Search repositories...">
+        <div class="repo-filters" id="repo-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="public">Public</button>
+          <button class="filter-btn" data-filter="private">Private</button>
+        </div>
+        <div class="repo-grid" id="repos-grid"></div>
+      </div>
+
+      <!-- REPO DETAIL PAGE -->
+      <div class="content page" id="page-repo-detail" style="display:none;overflow-y:auto;max-height:calc(100vh - 38px);padding-bottom:60px;">
+        <div id="repo-detail-content"></div>
+      </div>
+
+      <!-- CLONE REPO PAGE -->
+      <div class="content page" id="page-clone" style="display:none;">
+        <div class="page-header"><h1>Clone Repository</h1><span class="count">Download any repo to your machine</span></div>
+        <div class="clone-form">
+          <div class="step">
+            <div class="step-label">Step 1</div>
+            <div class="step-title">Repository URL</div>
+            <div class="field"><input type="text" id="clone-url" placeholder="https://github.com/owner/repo.git or owner/repo"></div>
+          </div>
+          <div class="step">
+            <div class="step-label">Step 2</div>
+            <div class="step-title">Destination Folder</div>
+            <div style="display:flex;gap:8px;">
+              <div class="field" style="flex:1;"><input type="text" id="clone-path" placeholder="Select folder..." readonly></div>
+              <button class="btn" id="clone-browse" style="margin-top:12px;">📂 Browse</button>
+            </div>
+          </div>
+          <button class="upload-btn" id="clone-btn" disabled><span>📥</span> Clone Repository</button>
+        </div>
+        <div class="terminal-overlay-inline" id="clone-terminal" style="display:none;">
+          <div class="terminal-body" id="clone-terminal-body"></div>
+        </div>
+      </div>
+
+      <!-- GIT CMD PAGE -->
+      <div class="content page" id="page-gitcmd" style="display:none;overflow-y:auto;max-height:calc(100vh - 38px);padding-bottom:60px;">
+        <div class="page-header"><h1>Git Commands</h1><span class="count">Reference with live examples</span></div>
+        <input type="text" class="repo-search" id="cmd-search" placeholder="Search commands...">
+        <div id="cmd-list"></div>
+      </div>
+
+      <!-- ABOUT PAGE -->
+      <div class="content page" id="page-about" style="display:none;overflow-y:auto;max-height:calc(100vh - 38px);padding-bottom:60px;">
+        <div class="about-page">
+          <div class="about-orb-container">
+            <svg viewBox="0 0 100 100" class="about-orb" id="about-orb">
+              <defs>
+                <filter id="glow-reactor" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                  <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                </filter>
+              </defs>
+              <circle class="orb-outer" cx="50" cy="50" r="46" fill="none" stroke="var(--saffron-deep)" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+              <circle class="orb-ring" cx="50" cy="50" r="38" fill="none" stroke="var(--saffron-deep)" stroke-width="8" stroke-dasharray="18 5.8" filter="url(#glow-reactor)" opacity="0.9"/>
+              <circle cx="50" cy="50" r="28" fill="none" stroke="var(--saffron-deep)" stroke-width="1.5" opacity="0.7"/>
+              <path d="M50 25 L53 30 L47 30 Z" fill="var(--saffron-deep)" transform="rotate(0 50 50)" opacity="0.8"/>
+              <path d="M50 25 L53 30 L47 30 Z" fill="var(--saffron-deep)" transform="rotate(120 50 50)" opacity="0.8"/>
+              <path d="M50 25 L53 30 L47 30 Z" fill="var(--saffron-deep)" transform="rotate(240 50 50)" opacity="0.8"/>
+              <g class="orb-core">
+                <circle cx="50" cy="50" r="16" fill="var(--saffron-deep)" filter="url(#glow-reactor)"/>
+                <text x="50" y="52.5" text-anchor="middle" font-size="6.5" font-weight="900" fill="var(--paper)" style="font-family:monospace;letter-spacing:0.5px">MIRA</text>
+              </g>
+            </svg>
+          </div>
+
+          <h1 class="about-title">MIRA_FUTURE.AI</h1>
+          <p class="about-subtitle">Git - Commit · v1.0</p>
+          <p class="about-desc">A secure, local-first GitHub desktop client for uploading, cloning, and managing repositories. Built with privacy and simplicity in mind no telemetry, no external servers, no data collection.</p>
+
+          <div class="about-features">
+            <div class="about-feature">🔒 Secure token storage via OS Keychain</div>
+            <div class="about-feature">📁 Upload files & folders to GitHub</div>
+            <div class="about-feature">📥 Clone repositories locally</div>
+            <div class="about-feature">📊 Profile analytics & commit history</div>
+            <div class="about-feature">🖥️ Frameless native desktop app</div>
+            <div class="about-feature">🚫 Zero telemetry, zero tracking</div>
+          </div>
+
+          <div class="about-footer">
+            <div class="about-row">
+              <button class="btn" id="terms-btn">📄 Terms & Conditions</button>
+              <button class="btn" id="instagram-btn">📷 @mira_future.ai</button>
+              <button class="btn" id="feedback-btn">✉ Feedback</button>
+            </div>
+            <div class="about-row">
+              <button class="btn" id="update-btn">🔄 Check for Updates</button>
+            </div>
+            <div class="about-copy">© 2026 MIRA_FUTURE.AI · All rights reserved</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPLOAD PAGE -->
+      <div class="content page" id="page-upload" style="display:none;">
+        <div class="page-header">
+          <h1>Upload to GitHub</h1>
+          <span class="count">Push files directly — no terminal needed</span>
+        </div>
+
+        <div class="upload-layout">
+          <!-- LEFT: File Selection -->
+          <div>
+            <div class="step">
+              <div class="step-label">Step 1</div>
+              <div class="step-title">Select Files</div>
+              <div class="drop-zone" id="drop-zone">
+                <div class="drop-zone-icon">📁</div>
+                <div class="drop-zone-text">Drop files or folders here</div>
+                <div class="drop-zone-sub">or click to browse</div>
+              </div>
+              <input type="file" id="file-input" multiple webkitdirectory style="display:none">
+              <input type="file" id="file-input-files" multiple style="display:none">
+              <div style="display:flex;gap:8px;margin-top:10px;">
+                <button class="btn" id="btn-folder" style="flex:1;">📂 Select Folder</button>
+                <button class="btn" id="btn-files" style="flex:1;">📄 Select Files</button>
+              </div>
+              <!-- File warnings -->
+              <div id="file-warnings" class="file-warnings" style="display:none;"></div>
+              <!-- File tree preview with exclude -->
+              <div id="file-preview" class="file-preview" style="display:none;">
+                <div class="file-preview-header">
+                  <span>Files to upload</span>
+                  <label class="gitignore-toggle"><input type="checkbox" id="gitignore-check" checked> Apply .gitignore</label>
+                </div>
+                <div class="file-list" id="file-list"></div>
+              </div>
+              <div class="file-count" id="file-count"></div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Repo & Options -->
+          <div>
+            <div class="step">
+              <div class="step-label">Step 2</div>
+              <div class="step-title">Choose Destination</div>
+              <div class="repo-option"><label><input type="radio" name="repo-mode" value="existing" checked><span>Existing Repository</span></label></div>
+              <div class="repo-option"><label><input type="radio" name="repo-mode" value="new"><span>Create New Repository</span></label></div>
+
+              <div id="existing-fields">
+                <div class="field"><label>Repository</label><select id="repo-select"><option value="">Loading...</option></select></div>
+                <div class="field"><label>Branch</label>
+                  <input type="text" id="branch-input" value="main">
+                  <div class="new-branch-row">
+                    <label class="new-branch-toggle"><input type="checkbox" id="new-branch-check"> Create as new branch</label>
+                  </div>
+                </div>
+                <div class="field"><label>Path (optional)</label><input type="text" id="path-input" placeholder="e.g. src/"><div class="field-hint">Subdirectory to upload into</div></div>
+              </div>
+
+              <div id="new-fields" style="display:none;">
+                <div class="field"><label>Repository Name</label><input type="text" id="new-repo-name" placeholder="my-project"></div>
+                <div class="field"><label>Description</label><input type="text" id="new-repo-desc" placeholder="Optional"></div>
+                <div class="checkbox-field"><input type="checkbox" id="new-repo-private"><label for="new-repo-private" style="all:unset;cursor:pointer;">Make private</label></div>
+                <div class="checkbox-field"><input type="checkbox" id="new-repo-readme" checked><label for="new-repo-readme" style="all:unset;cursor:pointer;">Add README</label></div>
+                <div class="field">
+                  <label>License</label>
+                  <select id="new-repo-license">
+                  <option value="">None</option>
+                  <option value="mit">MIT License</option>
+                  <option value="apache-2.0">Apache License 2.0</option>
+                  <option value="gpl-3.0">GNU GPLv3</option>
+                  <option value="gpl-2.0">GNU GPLv2</option>
+                  <option value="bsd-2-clause">BSD 2-Clause</option>
+                  <option value="bsd-3-clause">BSD 3-Clause</option>
+                  <option value="lgpl-2.1">GNU LGPLv2.1</option>
+                  <option value="lgpl-3.0">GNU LGPLv3</option>
+                  <option value="mpl-2.0">Mozilla Public License 2.0</option>
+                  <option value="agpl-3.0">GNU AGPLv3</option>
+                  <option value="unlicense">The Unlicense</option>
+                  <option value="isc">ISC License</option>
+                  <option value="artistic-2.0">Artistic License 2.0</option>
+                  <option value="cc0-1.0">CC0 1.0 Universal</option>
+                  <option value="epl-2.0">Eclipse Public License 2.0</option>
+                  <option value="zlib">zlib License</option>
+                </select>
+                </div>
+              </div>
+
+              <!-- Commit history preview -->
+              <div id="branch-commits" class="branch-commits" style="display:none;">
+                <div class="branch-commits-title">Recent commits on this branch:</div>
+                <div id="branch-commits-list"></div>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-label">Step 3</div>
+              <div class="step-title">Commit</div>
+              <div class="field"><label>Commit Message</label><input type="text" id="commit-msg" value="Upload files via Git - Commit"></div>
+            </div>
+
+            <!-- Progress bar -->
+            <div id="upload-progress" class="upload-progress" style="display:none;">
+              <div class="progress-label" id="progress-label">Uploading...</div>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar"></div></div>
+              <div class="progress-detail" id="progress-detail">0 / 0 files</div>
+            </div>
+
+            <button class="upload-btn" id="upload-btn" disabled><span>🚀</span> Upload to GitHub</button>
+          </div>
+        </div>
+
+        <!-- Terminal Popup -->
+      </div>
+
+      <div class="terminal-overlay" id="terminal-overlay">
+        <div class="terminal-box">
+          <div class="terminal-header"><span>⬤ Git - Commit Terminal</span><span class="terminal-close" id="terminal-close">✕</span></div>
+          <div class="terminal-body" id="terminal-body"></div>
+          <div class="terminal-footer">
+            <span class="terminal-status" id="terminal-status">Running...</span>
+            <button class="terminal-done-btn" id="terminal-done-btn">Done</button>
+          </div>
+        </div>
+      </div>
+    </main>
+    </div>
+  </div>
+
+  <!-- Update Modal -->
+  <div class="modal-overlay" id="update-modal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-title">🔄 Software Update</div>
+      <div id="update-modal-content" class="update-modal-content">
+        <p>Checking for updates...</p>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-cancel" id="update-modal-close">Close</button>
+        <button class="modal-btn modal-btn-confirm" id="update-download-btn" style="display:none;">Download Update</button>
+        <button class="modal-btn modal-btn-confirm" id="update-install-btn" style="display:none;">Install & Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Modal -->
+  <div class="modal-overlay" id="logout-modal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-title">Sign Out</div>
+      <p class="modal-msg">Are you sure you want to sign out?</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-cancel" id="logout-cancel">Cancel</button>
+        <button class="modal-btn modal-btn-confirm" id="logout-confirm">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms Modal -->
+  <div class="modal-overlay" id="terms-modal" style="display:none;">
+    <div class="modal-box terms-modal-box">
+      <div class="terms-header">
+        <div class="modal-title">Terms and Conditions</div>
+        <button class="terms-close" id="terms-close">✕</button>
+      </div>
+      <div class="terms-body">
+        <p><strong>Git - Commit</strong> — Desktop Application<br>Publisher: MIRA_FUTURE.AI<br>Effective Date: May 27, 2026 · Version 1.0</p>
+
+        <h4>1. ACCEPTANCE OF TERMS</h4>
+        <p>By downloading, installing, or using Git - Commit ("the Software"), you agree to be bound by these Terms and Conditions. If you do not agree, do not install or use the Software.</p>
+
+        <h4>2. LICENSE GRANT</h4>
+        <p>MIRA_FUTURE.AI grants you a limited, non-exclusive, non-transferable, revocable license to use the Software for personal and commercial purposes, subject to these terms.</p>
+
+        <h4>3. DESCRIPTION OF SERVICE</h4>
+        <p>Git - Commit is a desktop application that interfaces with GitHub's API to provide repository management, file upload, cloning, and profile viewing functionality. The Software acts as a client and does not host, store, or process your code on any third-party server other than GitHub.</p>
+
+        <h4>4. AUTHENTICATION & SECURITY</h4>
+        <p>The Software requires a GitHub Personal Access Token or GitHub OAuth credentials to function. Tokens are stored locally on your device using your operating system's secure credential storage (Windows Credential Manager). MIRA_FUTURE.AI does not collect, transmit, or have access to your tokens, credentials, or repository data. You are solely responsible for the security of your device and credentials.</p>
+
+        <h4>5. DATA & PRIVACY</h4>
+        <p><strong>No data collection:</strong> The Software does not collect analytics, telemetry, usage data, or personal information.<br><strong>No external servers:</strong> All communication occurs exclusively between your device and GitHub's API.<br><strong>Local-only operation:</strong> No data is sent to MIRA_FUTURE.AI or any third party.</p>
+
+        <h4>6. INTELLECTUAL PROPERTY</h4>
+        <p>The Software, including its source code, design, branding, and documentation, is the intellectual property of MIRA_FUTURE.AI. You may not reverse-engineer, decompile, modify, redistribute, resell, or create derivative works of the Software without prior written consent.</p>
+
+        <h4>7. RESTRICTIONS</h4>
+        <p>You agree NOT to: use the Software for any illegal activity; attempt to bypass GitHub's API rate limits or terms of service; redistribute, sublicense, or sell the Software; remove or alter any proprietary notices or branding; use the Software to violate any third party's rights.</p>
+
+        <h4>8. THIRD-PARTY SERVICES</h4>
+        <p>The Software interacts with GitHub (github.com), owned by Microsoft Corporation. Your use of GitHub is governed by GitHub's own Terms of Service. MIRA_FUTURE.AI is not affiliated with, endorsed by, or sponsored by GitHub or Microsoft.</p>
+
+        <h4>9. DISCLAIMER OF WARRANTIES</h4>
+        <p>THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</p>
+
+        <h4>10. LIMITATION OF LIABILITY</h4>
+        <p>IN NO EVENT SHALL MIRA_FUTURE.AI BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING FROM YOUR USE OF THE SOFTWARE.</p>
+
+        <h4>11. TERMINATION</h4>
+        <p>This license is effective until terminated. MIRA_FUTURE.AI may terminate your license at any time if you violate these Terms. Upon termination, you must uninstall and destroy all copies.</p>
+
+        <h4>12. GOVERNING LAW</h4>
+        <p>These Terms shall be governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in Chandigarh, India.</p>
+
+        <p style="margin-top:16px;font-weight:600;">By using the Software, you acknowledge that you have read, understood, and agree to these Terms and Conditions.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="upload.js"></script>
+</body>
+</html>
