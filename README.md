@@ -228,7 +228,6 @@ Git - Commit/
 ├── preload.js           ← Secure IPC bridge (token never crosses this)
 ├── package.json         ← Dependencies + build config
 ├── gitcommit.ico        ← App icon
-├── .env.example         ← OAuth config template
 ├── .gitignore
 └── public/
     ├── index.html       ← All pages (Profile, Repos, Upload, Clone, Git CMD, About)
