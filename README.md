@@ -202,13 +202,6 @@ cd git-commit
 npm install
 ```
 
-### Configure (Optional — for OAuth)
-
-```bash
-copy .env.example .env
-# Edit .env with your GitHub OAuth App credentials
-```
-
 ### Run
 
 ```bash
